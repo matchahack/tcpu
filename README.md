@@ -1,26 +1,25 @@
 # Architecture
-This design is for an 8-bit cpu along with a bootloader and IO capability
 
-The processor additionally has two `8-bit` registers: `reg_a`, `reg_b` - and memory `data_mem`
+This design is for an `8-bit` cpu along with a bootloader and IO capability - all combined into one design
 
 ![arch](./arch.png)
 
 # ISA
 
-### Supported instructions
+## Supported instructions
 
 ```
 instruction || 7:7 | 6:5  | 4:4   | 3:0      || elaboration
 =========================================================================
-add         || 0   | 00   | x     | x        || reg_a + reg_b
+add         || 0   | 00   | x     | x        || register_a + register_b
 -------------------------------------------------------------------------
-add 1       || 0   | 01   | x     | x        || reg_a + 1
+add 1       || 0   | 01   | x     | x        || register_a + 1
 -------------------------------------------------------------------------
-and         || 0   | 10   | x     | x        || reg_a & reg_b
+and         || 0   | 10   | x     | x        || register_a & register_b
 -------------------------------------------------------------------------
-not         || 0   | 11   | x     | x        || ~reg_a
+not         || 0   | 11   | x     | x        || ~register_a
 -------------------------------------------------------------------------
-jmp         || 1   | 00   | x     | address  || pc = address
+jmp         || 1   | 00   | x     | address  || program_counter = address
 -------------------------------------------------------------------------
 store       || 1   | 01   | x     | address  || data_mem[address] = reg_a
 -------------------------------------------------------------------------
