@@ -1,39 +1,84 @@
 import re
+from collections import defaultdict, deque
 
-INPUT_FILE = "gls/gatecount.txt"
+FIELDS = [
+    "Number of wires",
+    "Number of wire bits",
+    "Number of public wires",
+    "Number of public wire bits",
+    "Number of memories",
+    "Number of memory bits",
+    "Number of processes",
+    "Number of cells",
+]
 
-# Pattern to detect module headers
-module_pattern = re.compile(r"^===\s+(\S+)\s+===")
-# Pattern to detect cell lines
-cell_line_pattern = re.compile(r"^\s*(\S+)\s+(\d+)$")
+def parse_report(filename):
+    modules = {}
+    instances = defaultdict(list)
 
-module_counts = {}
-current_module = None
+    current_module = None
 
-with open(INPUT_FILE, "r") as f:
-    for line in f:
-        line = line.strip()
-        # Detect new module
-        m = module_pattern.match(line)
-        if m:
-            current_module = m.group(1)
-            module_counts[current_module] = {}
+    with open(filename, "r") as f:
+        for line in f:
+            line = line.strip()
+
+            # Module header
+            if line.startswith("===") and line.endswith("==="):
+                current_module = line.strip("= ").strip()
+                modules[current_module] = defaultdict(int)
+                continue
+
+            # Field extraction
+            for field in FIELDS:
+                if line.startswith(field):
+                    value = int(re.findall(r"\d+", line)[0])
+                    modules[current_module][field] = value
+
+            # Instance detection (lines like: module_name   count)
+            if line.startswith("$") or line.startswith("cpu_") or line.startswith("data_") or line.startswith("uart_") or line.startswith("chip_") or line.startswith("io_"):
+                parts = line.split()
+                if len(parts) == 2 and parts[1].isdigit():
+                    inst_name = parts[0]
+                    instances[current_module].append(inst_name)
+
+    return modules, instances
+
+
+def find_reachable(modules, instances, top):
+    reachable = set()
+    queue = deque([top])
+
+    while queue:
+        mod = queue.popleft()
+        if mod in reachable:
             continue
-        # Detect cell lines
-        if current_module:
-            c = cell_line_pattern.match(line)
-            if c:
-                cell_name = c.group(1)
-                count = int(c.group(2))
-                module_counts[current_module][cell_name] = count
+        reachable.add(mod)
 
-# Print total cells per module
-print(f"{'Module':<20} Total Cells")
-print("="*35)
-for module, cells in module_counts.items():
-    total_cells = sum(cells.values())
-    print(f"{module:<20} {total_cells}")
+        for child in instances.get(mod, []):
+            if child in modules:
+                queue.append(child)
 
-# Total for all modules
-total_all = sum(sum(cells.values()) for cells in module_counts.values())
-print("\nTotal cells in design:", total_all)
+    return reachable
+
+
+def summarize(modules, reachable):
+    totals = defaultdict(int)
+
+    print("\n=== INCLUDED MODULES (reachable) ===")
+    for mod in sorted(reachable):
+        print(mod)
+        for field in FIELDS:
+            totals[field] += modules[mod].get(field, 0)
+
+    print("\n=== TOTALS (reachable only) ===")
+    for field in FIELDS:
+        print(f"{field}: {totals[field]}")
+
+
+if __name__ == "__main__":
+    filename = "gls/gatecount.txt"
+    top_module = "control"  # <-- change if needed
+
+    modules, instances = parse_report(filename)
+    reachable = find_reachable(modules, instances, top_module)
+    summarize(modules, reachable)

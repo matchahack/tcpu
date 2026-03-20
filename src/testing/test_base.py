@@ -19,7 +19,7 @@ async def test_base(dut):
     await uart_source.write(b'20202020')
     await uart_source.wait()
 
-    for i in range(int(1e4)): await RisingEdge(dut.clk)
+    for i in range(5*int(1e4)): await RisingEdge(dut.clk)
 
     dut._log.info(f"Sending DATA")
     data_in = dut.io_core_interface_u.chip_top_u.data_in.value

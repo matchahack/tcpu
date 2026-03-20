@@ -5,19 +5,29 @@ module cpu_control #(
     input  logic       clk,
     input  logic       rst,
     input  logic       bootload_done,
-    input  logic       uart_tx_ready,
+    input  logic       uart_tx_done,
+    input  logic       uart_tx_active,
     input  logic [8*(MEM_DEPTH+1)-1:0] program_mem_flat,
     output logic       data_valid,
     output logic [7:0] trace
 );
 
-    localparam  IDLE    = 2'd0,
-                FETCH   = 2'd1,
-                DECODE  = 2'd2,
-                EXECUTE = 2'd3;
-    logic [1:0] cpu_control_state;
+    // ========================
+    // State encoding
+    // ========================
+    localparam   IDLE      = 3'd0,
+                 FETCH     = 3'd1,
+                 DECODE    = 3'd2,
+                 EXECUTE   = 3'd3,
+                 WAIT_UART = 3'd4,
+                 DONE      = 3'd5;
+    reg [2:0] state, next_state;
 
-    logic [7:0]         reg_a, reg_b, instruction_register;
+    // ========================
+    // Registers
+    // ========================
+    logic [7:0]         reg_a, reg_b;
+    logic [7:0]         instruction_register;
     logic [PC_SIZE-1:0] program_counter;
     logic [PC_SIZE-1:0] addr;
     logic [2:0]         opcode;
@@ -25,6 +35,9 @@ module cpu_control #(
     logic [7:0] data_mem    [MEM_DEPTH:0];
     logic [7:0] program_mem [MEM_DEPTH:0];
 
+    // ========================
+    // Program memory unpack
+    // ========================
     genvar i;
     generate
         for (i = 0; i <= MEM_DEPTH; i++) begin
@@ -35,85 +48,123 @@ module cpu_control #(
     assign opcode = instruction_register[7:5];
     assign addr   = instruction_register[PC_SIZE-1:0];
 
+    // ========================
+    // Sequential logic
+    // ========================
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
+            state                <= IDLE;
             program_counter      <= '0;
             reg_a                <= '0;
             reg_b                <= '0;
             instruction_register <= '0;
-            data_valid           <= '0;
-            cpu_control_state    <= IDLE;
+            data_valid           <= 1'b0;
+            trace                <= 8'd0;
         end else begin
-            case (cpu_control_state)
+            state <= next_state;
 
-                IDLE: begin
-                    case (bootload_done)
-                        '1: cpu_control_state <= FETCH;
-                        '0:begin
-                            program_counter      <= '0;
-                            reg_a                <= '0;
-                            reg_b                <= '0;
-                            instruction_register <= '0;
-                        end
-                    endcase
-                end
+            // default: no pulse unless explicitly set
+            data_valid <= 1'b0;
+
+            case (state)
 
                 FETCH: begin
-                    data_valid <= 1'b0;
-                    if (program_counter == MEM_DEPTH) begin
-                        cpu_control_state <= IDLE;
-                    end else begin
-                        instruction_register <= program_mem[program_counter];
-                        program_counter      <= program_counter + 1;
-                        cpu_control_state    <= DECODE;
-                    end
-                end
-
-                DECODE: begin
-                    cpu_control_state <= EXECUTE;
+                    instruction_register <= program_mem[program_counter];
+                    program_counter      <= program_counter + 1;
                 end
 
                 EXECUTE: begin
-                    data_valid        <= 1'b1;
                     unique case (opcode)
+
                         3'b000: begin // add
                             reg_a <= reg_a + reg_b;
-                            trace <= reg_a;
+                            trace <= reg_a + reg_b;
                         end
+
                         3'b001: begin // add one
                             reg_a <= reg_a + 8'd1;
-                            trace <= reg_a;
+                            trace <= reg_a + 8'd1;
                         end
+
                         3'b010: begin // and
                             reg_a <= reg_a & reg_b;
-                            trace <= reg_a;
+                            trace <= reg_a & reg_b;
                         end
+
                         3'b011: begin // not
                             reg_a <= ~reg_a;
                             trace <= ~reg_a;
                         end
-                        3'b100: begin // nop
+
+                        3'b100: begin // jmp
                             program_counter <= addr;
                             trace           <= {addr, 5'b0};
                         end
+
                         3'b101: begin // store
                             data_mem[addr] <= reg_a;
                             trace          <= reg_a;
                         end
+
                         3'b110: begin // load
                             reg_b <= data_mem[addr];
                             trace <= data_mem[addr];
                         end
+
                         3'b111: begin // nop
+                            trace <= trace;
                         end
+
                         default: ;
                     endcase
-                    cpu_control_state <= FETCH;
+
+                    data_valid <= 1'b1;
                 end
 
-                default: cpu_control_state <= IDLE;
+                default: ;
             endcase
         end
+    end
+
+    // ========================
+    // Next-state logic
+    // ========================
+    always_comb begin
+        next_state = state;
+
+        case (state)
+
+            IDLE: begin
+                if (bootload_done)
+                    next_state = FETCH;
+            end
+
+            FETCH: begin
+                if (program_counter == MEM_DEPTH)
+                    next_state = DONE;
+                else
+                    next_state = DECODE;
+            end
+
+            DECODE: begin
+                next_state = EXECUTE;
+            end
+
+            EXECUTE: begin
+                next_state = WAIT_UART;
+            end
+
+            WAIT_UART: begin
+                if (uart_tx_done)
+                    next_state = FETCH;
+            end
+
+            DONE: begin
+                next_state = DONE;
+            end
+
+            default: next_state = IDLE;
+        endcase
     end
 
 endmodule
