@@ -1,0 +1,8 @@
+*/__pycache__/
+*/*/__pycache__/
+venv/
+verilator/
+*sim_build/
+*.vcd
+*results.xml
+*/gls/gatecount.*

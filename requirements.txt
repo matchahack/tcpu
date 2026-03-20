@@ -1,0 +1,3 @@
+cocotb==1.9.2
+find_libpython==0.4.0
+cocotbext-uart==0.1.4

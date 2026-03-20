@@ -1,0 +1,42 @@
+`include "rtl/core/drivers/data_load.sv"
+`include "rtl/core/drivers/cpu_control.sv"
+
+module chip_top #(
+    parameter MEM_DEPTH = 3
+)(
+    input  logic       clk,
+    input  logic       rst,
+    input  logic       uart_rx_valid,
+    input  logic       uart_tx_ready,
+    input  logic [7:0] data_in,
+    output logic [7:0] data_out,
+    output logic       data_valid
+);
+
+    logic bootload_done;
+    logic [8*(MEM_DEPTH+1)-1:0] program_mem_flat;
+
+    data_load #(
+        .MEM_DEPTH(MEM_DEPTH)
+    ) data_load_u (
+        .clk(clk),
+        .rst(rst),
+        .bootload_done(bootload_done),
+        .uart_rx_valid(uart_rx_valid),
+        .instruction(data_in),
+        .program_mem_flat(program_mem_flat)
+    );
+
+    cpu_control #(
+        .MEM_DEPTH(MEM_DEPTH)
+    ) cpu_control_u (
+        .clk(clk),
+        .rst(rst),
+        .bootload_done(bootload_done),
+        .uart_tx_ready(uart_tx_ready),
+        .program_mem_flat(program_mem_flat),
+        .data_valid(data_valid),
+        .trace(data_out)
+    );
+
+endmodule
