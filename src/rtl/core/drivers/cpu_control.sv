@@ -98,7 +98,7 @@ module cpu_control #(
 
                         3'b100: begin // jmp
                             program_counter <= addr;
-                            trace           <= {addr, 5'b0};
+                            trace           <= {5'b0, addr};
                         end
 
                         3'b101: begin // store
