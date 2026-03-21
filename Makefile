@@ -1,5 +1,5 @@
 TOPLEVEL_LANG ?= verilog
-VERILOG_SOURCES = control.sv
+VERILOG_SOURCES = src/control.sv
 TOPLEVEL = control
 MODULE = control_tb
 
@@ -8,10 +8,12 @@ EXTRA_ARGS += --trace --trace-structs
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
-.PHONY: wave gatecount gls
+.PHONY: gatecount gls cocotb
 
-wave:
-	gtkwave control.vcd
+cocotb:
+	export COCOTB_SIM=1
+	make clean
+	make SIM=verilator
 
 gls:
 	yosys -p "read_verilog -sv $(VERILOG_SOURCES); synth; stat" > gls/gatecount.txt

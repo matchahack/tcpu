@@ -1,6 +1,6 @@
-`include "rtl/core/chip_top.sv"
-`include "rtl/io/uart_tx.sv"
-`include "rtl/io/uart_rx.sv"
+`include "src/rtl/core/chip_top.sv"
+`include "src/rtl/io/uart_tx.sv"
+`include "src/rtl/io/uart_rx.sv"
 
 module io_core_interface #(
     parameter BAUD = 115_200, 

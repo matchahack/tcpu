@@ -1,5 +1,5 @@
-`include "rtl/core/drivers/data_load.sv"
-`include "rtl/core/drivers/cpu_control.sv"
+`include "src/rtl/core/drivers/data_load.sv"
+`include "src/rtl/core/drivers/cpu_control.sv"
 
 module chip_top #(
     parameter MEM_DEPTH = 3

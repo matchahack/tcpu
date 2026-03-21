@@ -1,4 +1,4 @@
-`include "rtl/io_core_interface.sv"
+`include "src/rtl/io_core_interface.sv"
 
 module control (
     input   logic clk,

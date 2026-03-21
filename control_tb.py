@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import cocotb
-from testing.uart import run_program
+from test.uart import run_program
 
 # ---------------------------------------------------------------------------
 # Programs

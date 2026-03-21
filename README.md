@@ -52,15 +52,15 @@ chmod a+x *.sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-> generate simulation waveform
+## run simulation
 
 ```
-cd src
-./gen_sim.sh
+make cocotb
 ```
 
-> de-activate
+## generate synthesis information
 
 ```
-deactivate
+make gls
 ```
+
