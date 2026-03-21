@@ -41,3 +41,15 @@ make
 docker cp $(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/control.fs .
 openFPGALoader -b tangnano9k -f control.fs
 ```
+
+## Send UART signals to device
+
+> find out which device is the `uart-usbc` connector
+```
+ls /dev | grep ttyUSB*
+```
+
+> program tcpu over uart
+```
+python3 program_tcpu.py ttyUSB[0,1,2]
+```
