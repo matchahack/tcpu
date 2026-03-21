@@ -1,15 +1,40 @@
 #!/usr/bin/env python3
 
 import cocotb
-from testing.test_base import add_1_program, add_1_nop_program, \
-                                load_add_1_store_load_program, not_add_1_not_program, \
-                                add_jump_add_program
+from testing.uart import run_program
+
+# ---------------------------------------------------------------------------
+# Programs
+# ---------------------------------------------------------------------------
+
+PROGRAMS = {
+    "add_1":              ([0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20], "Repeated ADD 1"),
+    "add_1_nop":          ([0x20, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF], "ADD 1 then repeating NOP"),
+    "load_add_1_store":   ([0xC0, 0x20, 0xA0, 0xC0, 0xFF, 0xFF, 0xFF, 0xFF], "LOAD, ADD 1, STORE, LOAD, repeating NOP"),
+    "not_add_1_not":      ([0x60, 0x20, 0x20, 0x60, 0x20, 0x60, 0xFF, 0xFF], "NOT, ADD 1, NOT, repeating NOP"),
+    "add_jump_add":       ([0x20, 0x85, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20], "ADD, JUMP to 5, repeating ADD"),
+}
+
+# ---------------------------------------------------------------------------
+# Test entry points
+# ---------------------------------------------------------------------------
+
+#@cocotb.test()
+async def add_1_program(dut):
+    await run_program(dut, *PROGRAMS["add_1"])
+
+#@cocotb.test()
+async def add_1_nop_program(dut):
+    await run_program(dut, *PROGRAMS["add_1_nop"])
+
+#@cocotb.test()
+async def load_add_1_store_load_program(dut):
+    await run_program(dut, *PROGRAMS["load_add_1_store"])
 
 @cocotb.test()
-async def control_tb_base(dut):
-    #await add_1_program(dut)
-    #await add_1_nop_program(dut)
-    #await load_add_1_store_load_program(dut)
-    await not_add_1_not_program(dut)
-    #await add_jump_add_program(dut)
-    
+async def not_add_1_not_program(dut):
+    await run_program(dut, *PROGRAMS["not_add_1_not"])
+
+#@cocotb.test()
+async def add_jump_add_program(dut):
+    await run_program(dut, *PROGRAMS["add_jump_add"])
