@@ -2,14 +2,14 @@ module cpu_control #(
     parameter MEM_DEPTH = 3,
     parameter PC_SIZE   = $clog2(MEM_DEPTH+1)
 )(
-    input  logic       clk,
-    input  logic       rst,
-    input  logic       bootload_done,
-    input  logic       uart_tx_done,
-    input  logic       uart_tx_active,
+    input  logic                       clk,
+    input  logic                       rst,
+    input  logic                       bootload_done,
+    input  logic                       uart_tx_done,
+    input  logic                       uart_tx_active,
     input  logic [8*(MEM_DEPTH+1)-1:0] program_mem_flat,
-    output logic       data_valid,
-    output logic [7:0] trace
+    output logic                       data_valid,
+    output logic [7:0]                 trace
 );
 
     // ========================
@@ -82,8 +82,13 @@ module cpu_control #(
                         end
 
                         3'b001: begin // add one
-                            reg_a <= reg_a + 8'd1;
-                            trace <= reg_a + 8'd1;
+                            if (reg_a === 8'hFF) begin
+                                reg_a <= 8'b1;
+                                trace <= 8'b1;
+                            end else begin
+                                reg_a <= reg_a + 8'd1;
+                                trace <= reg_a + 8'd1;
+                            end
                         end
 
                         3'b010: begin // and
@@ -112,10 +117,8 @@ module cpu_control #(
                         end
 
                         3'b111: begin // nop
-                            trace <= trace;
                         end
 
-                        default: ;
                     endcase
 
                     data_valid <= 1'b1;

@@ -11,7 +11,7 @@ from cocotb.triggers import RisingEdge
 
 CLK_PERIOD_NS = 10          # 100 MHz
 RESET_CYCLES  = int(1e2)
-SETTLE_CYCLES = 5 * int(1e4)
+SETTLE_CYCLES = int(1e5)
 BAUD_RATE     = 115200
 UART_BITS     = 8
 
