@@ -1,5 +1,10 @@
-`include "src/rtl/core/drivers/data_load.sv"
-`include "src/rtl/core/drivers/cpu_control.sv"
+`ifdef TCPU_ENV_EMUL
+    `include "src/rtl/core/drivers/data_load.sv"
+    `include "src/rtl/core/drivers/cpu_control.sv"
+`else
+    `include "data_load.sv"
+    `include "cpu_control.sv"
+`endif
 
 module chip_top #(
     parameter MEM_DEPTH = 3

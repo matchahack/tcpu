@@ -41,7 +41,7 @@ python3 -m venv venv
 > If venv/ exists:
 
 ```
-source ./venv/bin/activate
+. ./venv/bin/activate
 ```
 
 > Then install simulation dependencies
@@ -49,7 +49,6 @@ source ./venv/bin/activate
 ```
 chmod a+x *.sh
 ./install.sh
-export PATH="$HOME/.local/bin:$PATH"
 ```
 
 > Run simulation
@@ -57,8 +56,6 @@ export PATH="$HOME/.local/bin:$PATH"
 make test
 ```
 
-<!-- 
 # Emulate
 
 > Follow the [`README.md` in `emulate/`](./emulate/) to build the FPGA environment and emulate `tcpu` on FPGA
--->

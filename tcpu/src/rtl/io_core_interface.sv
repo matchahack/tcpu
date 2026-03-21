@@ -1,6 +1,12 @@
-`include "src/rtl/core/chip_top.sv"
-`include "src/rtl/io/uart_tx.sv"
-`include "src/rtl/io/uart_rx.sv"
+`ifdef TCPU_ENV_EMUL
+    `include "src/rtl/core/chip_top.sv"
+    `include "src/rtl/io/uart_tx.sv"
+    `include "src/rtl/io/uart_rx.sv"
+`else
+    `include "chip_top.sv"
+    `include "uart_tx.sv"
+    `include "uart_rx.sv"
+`endif
 
 module io_core_interface #(
     parameter BAUD = 115_200, 
@@ -8,7 +14,6 @@ module io_core_interface #(
 )(
     input  logic clock,
     input  logic nreset,
-    input  logic mode,
     input  logic rx_serial_i,
     output logic tx_serial_o
 );

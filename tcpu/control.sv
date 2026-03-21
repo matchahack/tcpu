@@ -1,4 +1,8 @@
-`include "src/rtl/io_core_interface.sv"
+`ifdef TCPU_ENV_EMUL
+    `include "src/rtl/io_core_interface.sv"
+`else
+    `include "io_core_interface.sv"
+`endif
 
 module control (
     input   logic clk,

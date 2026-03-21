@@ -7,6 +7,8 @@ TOP ?= control
 
 .DEFAULT_GOAL := all
 
+export TCPU_ENV_EMUL=1
+
 all: \
 	$(TOP).fs
 
@@ -29,7 +31,7 @@ clean:
 	$(NEXTPNR) --json $< --write $@ --device $(DEVICE) --vopt family=$(FAMILY) --vopt cst=$(BOARD).cst
 
 %-synth.json: %.sv
-	$(YOSYS) -D LEDS_NR=6 -D OSC_TYPE_OSC -D INV_BTN=0 -D CPU_FREQ=27 -D BAUD_RATE=115200 -D NUM_HCLK=5 -D HAS_FLASH608K -p "read_verilog -sv $^; synth_gowin -json $@"
+	$(YOSYS) -D TCPU_ENV_EMUL -D LEDS_NR=6 -D OSC_TYPE_OSC -D INV_BTN=0 -D CPU_FREQ=27 -D BAUD_RATE=115200 -D NUM_HCLK=5 -D HAS_FLASH608K -p "read_verilog -sv $^; synth_gowin -json $@"
 
 %-unpacked.sv: %.fs
 	gowin_unpack -d $(FAMILY) -o $@ $^

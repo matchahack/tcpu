@@ -1,17 +1,19 @@
 TOPLEVEL_LANG ?= verilog
-VERILOG_SOURCES = src/control.sv
+VERILOG_SOURCES = tcpu/control.sv
 TOPLEVEL = control
 MODULE = control_tb
 
-# For waveform generation
-EXTRA_ARGS += --trace --trace-structs
+EXTRA_ARGS += --trace --trace-structs \
+						-Itcpu/src/rtl \
+						-Itcpu/src/rtl/io \
+						-Itcpu/src/rtl/core \
+						-Itcpu/src/rtl/core/drivers
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
-.PHONY: gatecount gls test
+.PHONY: test gls
 
 test:
-	export COCOTB_SIM=1
 	make clean
 	make SIM=verilator
 
