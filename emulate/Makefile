@@ -7,8 +7,6 @@ TOP ?= control
 
 .DEFAULT_GOAL := all
 
-export TCPU_ENV_EMUL=1
-
 all: \
 	$(TOP).fs
 
@@ -17,7 +15,6 @@ unpacked:\
 
 load:
 	make all
-	openFPGALoader -b $(BOARD) -f $(TOP).fs
 
 clean: 
 	rm -f *.json *.fs *-unpacked.sv sim *.svcd

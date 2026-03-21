@@ -1,5 +1,6 @@
 # Architecture
 
+> [!NOTE]
 An `8-bit` cpu along with a bootloader and IO capability - all combined into one design
 
 ![arch](./arch.png)

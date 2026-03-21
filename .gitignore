@@ -7,6 +7,7 @@ verilator/
 *.vcd
 *results.xml
 gls/gatecount.*
+emulate/*.fs
 emulate/yosys/
 emulate/nextpnr/
 emulate/openFPGALoader/
