@@ -1,6 +1,6 @@
 # Architecture
 
-This design is for an `8-bit` cpu along with a bootloader and IO capability - all combined into one design
+An `8-bit` cpu along with a bootloader and IO capability - all combined into one design
 
 ![arch](./arch.png)
 
@@ -28,7 +28,7 @@ load        || 1   | 10   | x     | address  || reg_b = data_mem[address]
 nop         || 1   | 11   | x     | x        || 
 ```
 
-# Setup
+# Simulate
 
 Install project dependencies
 
@@ -38,13 +38,13 @@ Install project dependencies
 python3 -m venv venv
 ```
 
-> if venv/ exists:
+> If venv/ exists:
 
 ```
 source ./venv/bin/activate
 ```
 
-> then
+> Then install simulation dependencies
 
 ```
 chmod a+x *.sh
@@ -52,15 +52,13 @@ chmod a+x *.sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-## run simulation
-
+> Run simulation
 ```
-make cocotb
-```
-
-## generate synthesis information
-
-```
-make gls
+make test
 ```
 
+<!-- 
+# Emulate
+
+> Follow the [`README.md` in `emulate/`](./emulate/) to build the FPGA environment and emulate `tcpu` on FPGA
+-->

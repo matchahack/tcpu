@@ -2,8 +2,11 @@ __pycache__/
 */__pycache__/
 */*/__pycache__/
 venv/
-verilator/*
+verilator/
 *sim_build/
 *.vcd
 *results.xml
 gls/gatecount.*
+emulate/yosys/
+emulate/nextpnr/
+emulate/openFPGALoader/

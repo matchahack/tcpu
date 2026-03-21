@@ -12,7 +12,6 @@ if [ ! -d "verilator" ]; then
 fi
 
 unset VERILATOR_ROOT
-unset VERILATOR_ROOT
 cd verilator
 git pull
 git checkout stable

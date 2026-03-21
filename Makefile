@@ -8,9 +8,9 @@ EXTRA_ARGS += --trace --trace-structs
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
-.PHONY: gatecount gls cocotb
+.PHONY: gatecount gls test
 
-cocotb:
+test:
 	export COCOTB_SIM=1
 	make clean
 	make SIM=verilator

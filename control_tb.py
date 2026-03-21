@@ -21,27 +21,27 @@ PROGRAMS = {
 # Test entry points
 # ---------------------------------------------------------------------------
 
-#@cocotb.test()
+@cocotb.test()
 async def add_1_program(dut):
     await run_program(dut, *PROGRAMS["add_1"])
 
-#@cocotb.test()
+@cocotb.test()
 async def add_1_nop_program(dut):
     await run_program(dut, *PROGRAMS["add_1_nop"])
 
-#@cocotb.test()
+@cocotb.test()
 async def load_add_1_store_load_program(dut):
     await run_program(dut, *PROGRAMS["load_add_1_store"])
 
-#@cocotb.test()
+@cocotb.test()
 async def not_add_1_not_program(dut):
     await run_program(dut, *PROGRAMS["not_add_1_not"])
 
-#@cocotb.test()
+@cocotb.test()
 async def add_jump_add_program(dut):
     await run_program(dut, *PROGRAMS["add_jump_add"])
 
-#@cocotb.test()
+@cocotb.test()
 async def add_1_store_add_1_load_and(dut):
     await run_program(dut, *PROGRAMS["add_1_store_add_1_load_and"])
 

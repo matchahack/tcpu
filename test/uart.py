@@ -39,7 +39,7 @@ async def run_program(dut, bytes_: list[int], description: str):
     uart_source = UartSource(dut.rx_serial, baud=BAUD_RATE, bits=UART_BITS)
     uart_sink   = UartSink(dut.tx_serial,   baud=BAUD_RATE, bits=UART_BITS)
 
-    dut._log.info(f"Running program: {description}")
+    dut._log.info(f"\nRunning program: {description}")
     await uart_source.write(bytes_)
     await uart_source.wait()
 
