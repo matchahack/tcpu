@@ -9,7 +9,7 @@ from cocotb.triggers import RisingEdge
 # Constants
 # ---------------------------------------------------------------------------
 
-CLK_PERIOD_NS = 10          # 100 MHz
+CLK_PERIOD_NS = 40 # 25 MHz
 RESET_CYCLES  = int(1e2)
 SETTLE_CYCLES = int(1e5)
 BAUD_RATE     = 115200

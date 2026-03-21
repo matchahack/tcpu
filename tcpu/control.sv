@@ -11,9 +11,19 @@ module control (
     output  logic tx_serial
 );
 
+// Set Parameter CLKS_PER_BIT as follows:
+// CLKS_PER_BIT = (Frequency of i_Clock)/(Frequency of UART)
+// Example: 25 MHz Clock, 115200 baud UART
+// (25000000)/(115200)  = 434
+// (27000000)/(115200)  = 217
+`ifdef TCPU_ENV_EMUL
+    parameter CLKS_PER_BIT = 234; // 27 MHz for T9K
+`else
+    parameter CLKS_PER_BIT = 217; // 25 MHz for sim and tapeout
+`endif
+
 io_core_interface #(
-    .CLK_FREQ(100_000_000),
-    .BAUD(115_200)
+    .CLKS_PER_BIT(CLKS_PER_BIT)
 ) io_core_interface_u (
     .clock(clk),
     .nreset(rst_n),
