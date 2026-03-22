@@ -1,3 +1,7 @@
+# =====================
+# COCOTB BUILD COMMANDS
+# =====================
+
 TOPLEVEL_LANG ?= verilog
 VERILOG_SOURCES = tcpu/control.sv
 TOPLEVEL = control
@@ -11,11 +15,16 @@ EXTRA_ARGS += --trace --trace-structs \
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
-.PHONY: test gls
+.PHONY: verif gls
 
-test:
+verif:
 	make clean
 	make SIM=verilator
+
+
+# ============================
+# GAT LEVEL SIM BUILD COMMANDS
+# ============================
 
 gls:
 	yosys -p "read_verilog -sv $(VERILOG_SOURCES); synth; stat" > gls/gatecount.txt

@@ -6,50 +6,33 @@ We will use the `Tangnano9K` to emulate the `tcpu`
 
 ## Install FPGA toolchain in Linux
 
-> install openfpgaloader
+> install `openFPGALoader`:
 ```
+cd /home/$USER/tcpu/emulate/
+chmod a+x *.sh
 ./install_ofpgal.sh
 ```
 
 > [!IMPORTANT]
 > Follow the [readme here](https://github.com/matchahack/think.like_a_chip/tree/main/0_GETTING_STARTED) to get the docker image for building bitstreams
 
-
-> terminal 0:
-```
-docker run -it --privileged --device=/dev/ttyUSB0 --device=/dev/ttyUSB1 --device=/dev/ttyUSB2 $(docker images -q bsides_tlac)
-```
-
-> terminal 1:
-```
-cd /home/$USER/tcpu/emulate/
-docker cp ../tcpu $(docker ps -q --filter "ancestor=bsides_tlac"):/root/
-docker cp Makefile $(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
-docker cp tangnano9k.cst $(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
-```
-
 ## Build and Load the `tcpu` onto the T9K
 
-> build in docker (terminal 0)
+> run docker (terminal 0):
 ```
-cd tcpu
-make
+make docker_up
 ```
 
-> load in host, and flash fpga (terminal 1)
+> build in docker, and flash bitstream to fpga (terminal 1):
 ```
-docker cp $(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/control.fs .
-openFPGALoader -b tangnano9k -f control.fs
+make docker_build
+make fpga_flash
 ```
 
 ## Send UART signals to device
 
-> find out which device is the `uart-usbc` connector
+> find out which device is the `uart-usbc` connector, and program tcpu over uart (terminal 1):
 ```
 ls /dev | grep ttyUSB*
-```
-
-> program tcpu over uart
-```
-python3 program_tcpu.py ttyUSB[0,1,2]
+python3 program_tcpu.py ttyUSB1 #[0,1,2]
 ```

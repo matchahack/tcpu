@@ -1,3 +1,7 @@
+# ===============================
+# TANGNANO9K YOSYS BUILD COMMANDS
+# ===============================
+
 YOSYS ?= yosys
 NEXTPNR ?= nextpnr-himbaechel
 BOARD ?= tangnano9k
@@ -32,3 +36,20 @@ clean:
 
 %-unpacked.sv: %.fs
 	gowin_unpack -d $(FAMILY) -o $@ $^
+
+# ==========================
+# HOST2DOCKER BUILD COMMANDS
+# ==========================
+
+docker_up:
+	docker run -it --privileged --device=/dev/ttyUSB0 --device=/dev/ttyUSB1 --device=/dev/ttyUSB2 $$(docker images -q bsides_tlac)
+
+docker_build:
+	docker cp ../tcpu $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/
+	docker cp Makefile $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
+	docker cp tangnano9k.cst $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
+	docker exec -d -w /root/tcpu $$(docker ps -q --filter "ancestor=bsides_tlac") make all
+	
+fpga_flash:
+	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/control.fs .
+	openFPGALoader -b tangnano9k -f control.fs

@@ -7,7 +7,7 @@ An `8-bit` cpu along with a bootloader and IO capability - all combined into one
 
 # ISA
 
-## Supported instructions
+> Supported instructions:
 
 ```
 instruction || 7:7 | 6:5  | 4:4   | 3:0      || elaboration
@@ -31,22 +31,19 @@ nop         || 1   | 11   | x     | x        ||
 
 # Simulate
 
-Install project dependencies
+> If `venv/` exists:
+```
+cd /home/$USER/tcpu/emulate/
+. ./venv/bin/activate
+```
 
-> if no venv/
 
+> Create `venv/` (if no `venv/`)
 ```
 python3 -m venv venv
 ```
 
-> If venv/ exists:
-
-```
-. ./venv/bin/activate
-```
-
-> Then install simulation dependencies
-
+> Install simulation dependencies
 ```
 chmod a+x *.sh
 ./install.sh
@@ -54,9 +51,9 @@ chmod a+x *.sh
 
 > Run simulation
 ```
-make test
+make verif
 ```
 
 # Emulate
 
-> Follow the [`README.md` in `emulate/`](./emulate/) to build the FPGA environment and emulate `tcpu` on FPGA
+> Follow the [`README.md` in `emulate/`](./emulate/README.md) to build the FPGA environment and emulate `tcpu` on FPGA

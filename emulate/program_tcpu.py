@@ -59,7 +59,7 @@ def run_program(ser: serial.Serial, program: Program) -> bytes:
 def main():
     ser = serial.Serial(
         port="/dev/ttyUSB1",
-        baudrate=9600,
+        baudrate=115200,
         timeout=0  # non-blocking read
     )
 
