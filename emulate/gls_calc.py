@@ -76,7 +76,7 @@ def summarize(modules, reachable):
 
 
 if __name__ == "__main__":
-    filename = "gls/gatecount.txt"
+    filename = "gatecount.txt"
     top_module = "control"  # <-- change if needed
 
     modules, instances = parse_report(filename)

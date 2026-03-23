@@ -29,10 +29,9 @@ make docker_build
 make fpga_flash
 ```
 
-## Send UART signals to device
+## Read device cell/gate usage summary
 
-> find out which device is the `uart-usbc` connector, and program tcpu over uart (terminal 1):
+> (terminal 1):
 ```
-ls /dev | grep ttyUSB*
-python3 program_tcpu.py ttyUSB1 #[0,1,2]
+make read_gls
 ```

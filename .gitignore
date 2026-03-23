@@ -6,7 +6,7 @@ verilator/
 *sim_build/
 *.vcd
 *results.xml
-gls/gatecount.*
+emulate/gatecount.*
 emulate/*.fs
 emulate/yosys/
 emulate/nextpnr/

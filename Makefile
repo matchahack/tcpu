@@ -20,12 +20,3 @@ include $(shell cocotb-config --makefiles)/Makefile.sim
 verif:
 	make clean
 	make SIM=verilator
-
-
-# ============================
-# GAT LEVEL SIM BUILD COMMANDS
-# ============================
-
-gls:
-	yosys -p "read_verilog -sv $(VERILOG_SOURCES); synth; stat" > gls/gatecount.txt
-	python3 gls/calculate.py

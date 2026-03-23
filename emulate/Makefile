@@ -37,6 +37,9 @@ clean:
 %-unpacked.sv: %.fs
 	gowin_unpack -d $(FAMILY) -o $@ $^
 
+gls:
+	yosys -D TCPU_ENV_EMUL -p "read_verilog -sv $(TOP).sv; synth; stat" > gatecount.txt
+
 # ==========================
 # HOST2DOCKER BUILD COMMANDS
 # ==========================
@@ -49,7 +52,12 @@ docker_build:
 	docker cp Makefile $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
 	docker cp tangnano9k.cst $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
 	docker exec -d -w /root/tcpu $$(docker ps -q --filter "ancestor=bsides_tlac") make all
-	
+	docker exec -d -w /root/tcpu $$(docker ps -q --filter "ancestor=bsides_tlac") make gls
+
+read_gls:
+	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/gatecount.txt .
+	python3 gls_calc.py
+
 fpga_flash:
 	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/control.fs .
 	openFPGALoader -b tangnano9k -f control.fs
