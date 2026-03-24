@@ -1,6 +1,6 @@
 import serial
 
-ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=1)
+ser = serial.Serial('/dev/ttyUSB2', 115200, timeout=1)
 
 ser.write(b'\x20' * 8)
 resp = ser.read(256)

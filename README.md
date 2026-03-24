@@ -31,22 +31,17 @@ nop         || 1   | 11   | x     | x        ||
 
 # Simulate
 
-> If `venv/` exists:
+> If `venv/` does not exist, create `venv/` and install simulation dependencies:
 ```
-cd /home/$USER/tcpu/emulate/
-. ./venv/bin/activate
-```
-
-
-> Create `venv/` (if no `venv/`)
-```
-python3 -m venv venv
-```
-
-> Install simulation dependencies
-```
-chmod a+x *.sh
-./install.sh
+cd /home/$USER/tcpu/
+if [ -d "venv" ]; then
+    . ./venv/bin/activate
+else
+    python3 -m venv venv
+    chmod a+x *.sh
+    . ./venv/bin/activate
+    ./install.sh
+fi
 ```
 
 > Run simulation

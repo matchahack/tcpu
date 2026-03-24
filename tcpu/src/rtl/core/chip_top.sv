@@ -7,7 +7,7 @@
 `endif
 
 module chip_top #(
-    parameter MEM_DEPTH = 3
+    parameter MEM_DEPTH = 7
 )(
     input  logic       clk,
     input  logic       rst,
@@ -22,8 +22,6 @@ module chip_top #(
     logic bootload_done;
     logic [8*(MEM_DEPTH+1)-1:0] program_mem_flat;
 
-    //assign data_out = data_in;
-    //assign data_valid = uart_rx_valid;
     data_load #(
         .MEM_DEPTH(MEM_DEPTH)
     ) data_load_u (

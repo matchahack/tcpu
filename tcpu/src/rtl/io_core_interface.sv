@@ -9,7 +9,7 @@
 `endif
 
 module io_core_interface #(
-    parameter CLKS_PER_BIT = 87
+    parameter CLKS_PER_BIT = 217
 )(
     input  logic clock,
     input  logic nreset,
@@ -20,6 +20,9 @@ module io_core_interface #(
 logic tx_valid_i, tx_active_o, tx_done_o, rx_valid_o;
 logic [7:0] rx_data_o, tx_data_i;
 
+//assign tx_data_i = rx_data_o;
+//assign tx_valid_i = rx_valid_o;
+
 uart_rx #(
     .CLKS_PER_BIT(CLKS_PER_BIT) // CLK_FREQ/BAUD
 ) uart_rx_u (
@@ -29,6 +32,7 @@ uart_rx #(
     .o_Rx_Byte(rx_data_o)
 );
 
+///*
 chip_top #(
     .MEM_DEPTH(7)
 ) chip_top_u (
@@ -41,6 +45,7 @@ chip_top #(
     .data_out(tx_data_i),
     .data_valid(tx_valid_i)
 );
+//*/
 
 uart_tx #(
     .CLKS_PER_BIT(CLKS_PER_BIT)

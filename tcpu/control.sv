@@ -14,8 +14,8 @@ module control (
 // Set Parameter CLKS_PER_BIT as follows:
 // CLKS_PER_BIT = (Frequency of i_Clock)/(Frequency of UART)
 // Example: 25 MHz Clock, 115200 baud UART
-// (25000000)/(115200)  = 434
-// (27000000)/(115200)  = 217
+// (25000000)/(115200)  = 217
+// (27000000)/(115200)  = 234
 `ifdef TCPU_ENV_EMUL
     parameter CLKS_PER_BIT = 234; // 27 MHz for T9K
 `else

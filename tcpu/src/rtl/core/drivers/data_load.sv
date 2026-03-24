@@ -1,6 +1,6 @@
 module data_load #(
-    parameter  MEM_DEPTH = 3,
-    localparam PC_SIZE   = $clog2(MEM_DEPTH + 1)
+    parameter  MEM_DEPTH = 7,
+    localparam PC_SIZE   = 3
 )(
     input  logic                        clk,
     input  logic                        rst,
@@ -35,8 +35,13 @@ module data_load #(
     logic mem_full;
     assign mem_full = (program_counter == MEM_DEPTH[PC_SIZE-1:0]);
 
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
+    `ifdef TCPU_ENV_EMUL
+        always_ff @(posedge clk or negedge rst) begin
+            if (!rst) begin
+    `else
+        always_ff @(posedge clk or posedge rst) begin
+            if (rst) begin
+    `endif
             program_counter <= '0;
             bootload_done   <= 1'b0;
         end else if (uart_rx_valid && !bootload_done) begin

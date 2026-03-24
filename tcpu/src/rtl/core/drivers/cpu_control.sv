@@ -1,6 +1,6 @@
 module cpu_control #(
-    parameter MEM_DEPTH = 3,
-    parameter PC_SIZE   = $clog2(MEM_DEPTH+1)
+    parameter MEM_DEPTH = 7,
+    parameter PC_SIZE   = 3
 )(
     input  logic                       clk,
     input  logic                       rst,
@@ -51,8 +51,13 @@ module cpu_control #(
     // ========================
     // Sequential logic
     // ========================
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
+    `ifdef TCPU_ENV_EMUL
+        always_ff @(posedge clk or negedge rst) begin
+            if (!rst) begin
+    `else
+        always_ff @(posedge clk or posedge rst) begin
+            if (rst) begin
+    `endif
             state                <= IDLE;
             program_counter      <= '0;
             reg_a                <= '0;

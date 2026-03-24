@@ -2,7 +2,7 @@
 // File Downloaded from http://www.nandland.com
 //////////////////////////////////////////////////////////////////////
 module uart_rx #(
-    parameter CLKS_PER_BIT = 87 // 10 mHZ
+    parameter CLKS_PER_BIT = 217 // 25 mHZ
 )(
     input        i_Clock,
     input        i_Rx_Serial,
