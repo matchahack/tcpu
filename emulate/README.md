@@ -1,4 +1,4 @@
-# Testing tcpu on FPGA
+# Testing `tcpu` on FPGA
 
 We will use the `Tangnano9K` to emulate the `tcpu`
 
@@ -16,7 +16,7 @@ chmod a+x *.sh
 > [!IMPORTANT]
 > Follow the [readme here](https://github.com/matchahack/think.like_a_chip/tree/main/0_GETTING_STARTED) to get the docker image for building bitstreams
 
-## Build and Load the `tcpu` onto the T9K
+## Build and load the `tcpu` onto the T9K
 
 > run docker (terminal 0):
 ```
@@ -34,4 +34,12 @@ make fpga_flash
 > (terminal 1):
 ```
 make read_gls
+```
+
+## Run program on emulator
+
+> (terminal 1):
+```
+chmod a+x *.sh
+python programmer.py -p /dev/ttyUSB2 -i "[0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20]"
 ```
