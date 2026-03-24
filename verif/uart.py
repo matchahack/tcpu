@@ -22,10 +22,10 @@ UART_BITS     = 8
 async def reset_dut(dut):
     """Assert then deassert active-low reset."""
     cocotb.start_soon(Clock(dut.clk, CLK_PERIOD_NS, units="ns").start())
-    dut.rst_n.value = 1
+    dut.rst_n.value = 0
     for _ in range(RESET_CYCLES):
         await RisingEdge(dut.clk)
-    dut.rst_n.value = 0
+    dut.rst_n.value = 1
 
 
 def chip_top(dut):
