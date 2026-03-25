@@ -27,23 +27,14 @@ async def reset_dut(dut):
         await RisingEdge(dut.clk)
     dut.rst_n.value = 1
 
-
-def chip_top(dut):
-    return dut.io_core_interface_u.chip_top_u
-
-
 async def run_program(dut, bytes_: list[int], description: str):
     """Upload *bytes_* over UART, wait for the result, and log data_in/data_out."""
     await reset_dut(dut)
-
     uart_source = UartSource(dut.rx_serial, baud=BAUD_RATE, bits=UART_BITS)
     uart_sink   = UartSink(dut.tx_serial,   baud=BAUD_RATE, bits=UART_BITS)
-
     dut._log.info(f"\nRunning program: {description}")
     await uart_source.write(bytes_)
     await uart_source.wait()
-
     for _ in range(SETTLE_CYCLES):
         await RisingEdge(dut.clk)
-
     await uart_sink.read()
