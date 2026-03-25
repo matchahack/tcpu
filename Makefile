@@ -15,7 +15,7 @@ EXTRA_ARGS += --trace --trace-structs \
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
-.PHONY: verif gls
+.PHONY: verif
 
 verif:
 	make clean

@@ -29,17 +29,17 @@ make docker_build
 make fpga_flash
 ```
 
-## Read device cell/gate usage summary
+## Read cell/gate usage summary
 
-> (terminal 1):
+> Calculate the synthesizer output for memory and logic elements (terminal 1):
 ```
 make read_gls
 ```
 
 ## Run program on emulator
 
-> (terminal 1):
+> Program the CPU with a list of instructions (terminal 1):
 ```
 chmod a+x *.sh
-python programmer.py -p /dev/ttyUSB2 -i "[0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20]"
+python programmer.py -p /dev/ttyUSB2 -b 115200 -i "[0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20]"
 ```
