@@ -52,3 +52,7 @@ make verif
 # Emulate
 
 > Follow the [`README.md` in `emulate/`](./emulate/README.md) to build the FPGA environment and emulate `tcpu` on FPGA
+
+# Gate Level Synthesis, and Fabrication
+
+> Performed in this [TinyTapeout Fork](https://github.com/matchahack/ttsky-tcpu)
