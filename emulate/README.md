@@ -38,6 +38,15 @@ make read_gls
 
 ## Run program on emulator
 
+You will need a `USBC` to `UART` converter to program this CPU. [This is how to make your own](https://github.com/matchahack/usbc2uart.up). Or just buy a cheap one online.
+
+> [!IMPORTANT]
+Plug in the `USBC2UART` converter, and use `ls /devttyUSB*` to find out which interface to use for programming.
+
+## How to test
+
+Plug in the `USBC2UART` and connect the `TX`/`RX`/`GND` wires correctly, then program the CPU with a list of instructions:
+
 > Program the CPU with a list of instructions (terminal 1):
 
 ```
