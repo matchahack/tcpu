@@ -1,19 +1,15 @@
 `ifdef TCPU_ENV_EMUL
-    `include "src/rtl/core/drivers/data_load.sv"
-    `include "src/rtl/core/drivers/cpu_control.sv"
-`else
-    `include "data_load.sv"
+    `include "bootloader.sv"
     `include "cpu_control.sv"
 `endif
 
-module chip_top #(
+module compute_top #(
     parameter MEM_DEPTH = 7
 )(
     input  logic       clk,
     input  logic       rst,
     input  logic       uart_rx_valid,
     input  logic       uart_tx_done,
-    input  logic       uart_tx_active,
     input  logic [7:0] data_in,
     output logic [7:0] data_out,
     output logic       data_valid
@@ -22,9 +18,9 @@ module chip_top #(
     logic bootload_done;
     logic [8*(MEM_DEPTH+1)-1:0] program_mem_flat;
 
-    data_load #(
+    bootloader #(
         .MEM_DEPTH(MEM_DEPTH)
-    ) data_load_u (
+    ) bootloader_u (
         .clk(clk),
         .rst(rst),
         .bootload_done(bootload_done),
@@ -40,7 +36,6 @@ module chip_top #(
         .rst(rst),
         .bootload_done(bootload_done),
         .uart_tx_done(uart_tx_done),
-        .uart_tx_active(uart_tx_active),
         .program_mem_flat(program_mem_flat),
         .data_valid(data_valid),
         .trace(data_out)

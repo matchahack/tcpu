@@ -3,15 +3,11 @@
 # =====================
 
 TOPLEVEL_LANG ?= verilog
-VERILOG_SOURCES = tcpu/control.sv
-TOPLEVEL = control
+VERILOG_SOURCES = src/project.sv
+TOPLEVEL = tt_um_tcpu_alienflip
 MODULE = control_tb
 
-EXTRA_ARGS += --trace --trace-structs \
-						-Itcpu/src/rtl \
-						-Itcpu/src/rtl/io \
-						-Itcpu/src/rtl/core \
-						-Itcpu/src/rtl/core/drivers
+EXTRA_ARGS += --trace --trace-structs -Isrc
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 

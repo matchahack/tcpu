@@ -7,7 +7,7 @@ NEXTPNR ?= nextpnr-himbaechel
 BOARD ?= tangnano9k
 FAMILY ?= GW1N-9C
 DEVICE ?= GW1NR-LV9QN88PC6/I5
-TOP ?= control
+TOP ?= project
 
 .DEFAULT_GOAL := all
 
@@ -48,11 +48,11 @@ docker_up:
 	docker run -it --privileged --device=/dev/ttyUSB0 --device=/dev/ttyUSB1 --device=/dev/ttyUSB2 $$(docker images -q bsides_tlac)
 
 docker_build:
-	docker cp ../tcpu $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/
-	docker cp Makefile $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
-	docker cp tangnano9k.cst $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu
-	docker exec -d -w /root/tcpu $$(docker ps -q --filter "ancestor=bsides_tlac") make all
-	docker exec -d -w /root/tcpu $$(docker ps -q --filter "ancestor=bsides_tlac") make gls
+	docker cp ../src $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/
+	docker cp Makefile $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/src
+	docker cp tangnano9k.cst $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/src
+	docker exec -d -w /root/src $$(docker ps -q --filter "ancestor=bsides_tlac") make all
+	docker exec -d -w /root/src $$(docker ps -q --filter "ancestor=bsides_tlac") make gls
 
 read_gls:
 	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/gatecount.txt .
