@@ -55,9 +55,9 @@ docker_build:
 	docker exec -d -w /root/src $$(docker ps -q --filter "ancestor=bsides_tlac") make gls
 
 read_gls:
-	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/gatecount.txt .
+	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/src/gatecount.txt .
 	python3 gls_calc.py
 
 fpga_flash:
-	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/tcpu/control.fs .
-	openFPGALoader -b tangnano9k -f control.fs
+	docker cp $$(docker ps -q --filter "ancestor=bsides_tlac"):/root/src/project.fs .
+	openFPGALoader -b tangnano9k -f project.fs
