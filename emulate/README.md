@@ -14,7 +14,7 @@ chmod a+x *.sh
 ```
 
 > [!IMPORTANT]
-> Follow the [readme here](https://github.com/matchahack/think.like_a_chip/tree/main/0_GETTING_STARTED) to get the docker image for building bitstreams
+> Follow the [readme here](https://github.com/matchahack/think.like_a_chip/tree/main/0_GETTING_STARTED#install-docker) to get the docker image for building bitstreams
 
 ## Build and load the `tcpu` onto the T9K
 
