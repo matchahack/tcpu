@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) 2026 Kai Harris
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 module bootloader #(
     parameter  MEM_DEPTH = 7,
     localparam PC_SIZE   = $clog2(MEM_DEPTH + 1)
 )(
     input  logic                        clk,
-    input  logic                        rst,
+    input  logic                        rst_n,
     input  logic                        uart_rx_valid,
     input  logic [7:0]                  instruction,
     output logic [8*(MEM_DEPTH+1)-1:0]  program_mem_flat,
@@ -29,7 +34,7 @@ module bootloader #(
     endgenerate
 
     // -------------------------------------------------------------------------
-    // Bootloader FSM with full reset
+    // Bootloader FSM
     // -------------------------------------------------------------------------
 
     logic mem_full;
@@ -38,7 +43,7 @@ module bootloader #(
     integer j;
 
     always_ff @(posedge clk) begin
-        if (!rst) begin
+        if (!rst_n) begin
             program_counter <= '0;
             bootload_done   <= 1'b0;
 

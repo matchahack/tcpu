@@ -8,7 +8,7 @@ module cpu_control #(
     parameter PC_SIZE   = 3 // $clog2(MEM_DEPTH + 1)
 )(
     input  logic                       clk,
-    input  logic                       rst,
+    input  logic                       rst_n,
     input  logic                       bootload_done,
     input  logic                       uart_tx_done,
     input  logic [8*(MEM_DEPTH+1)-1:0] program_mem_flat,
@@ -58,7 +58,7 @@ module cpu_control #(
     // Sequential logic
     // ========================
     always_ff @(posedge clk) begin
-        if (!rst) begin
+        if (!rst_n) begin
             state                <= IDLE;
             program_counter      <= '0;
             reg_a                <= '0;

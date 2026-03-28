@@ -12,8 +12,8 @@
 module base_interface #(
     parameter CLKS_PER_BIT = 217
 )(
-    input  logic clock,
-    input  logic nreset,
+    input  logic clk,
+    input  logic rst_n,
     input  logic rx_serial_i,
     output logic tx_serial_o
 );
@@ -26,8 +26,8 @@ wire _unused_txa = &{tx_active_o, 1'b0};
 uart_rx #(
     .CLKS_PER_BIT(CLKS_PER_BIT) // CLK_FREQ/BAUD
 ) uart_rx_u (
-    .i_Clock(clock),
-    .rst_n(nreset),
+    .i_Clock(clk),
+    .rst_n(rst_n),
     .i_Rx_Serial(rx_serial_i),
     .o_Rx_DV(rx_valid_o),
     .o_Rx_Byte(rx_data_o)
@@ -36,8 +36,8 @@ uart_rx #(
 compute_top #(
     .MEM_DEPTH(7)
 ) compute_top_u (
-    .clk(clock),
-    .rst(nreset),
+    .clk(clk),
+    .rst_n(rst_n),
     .uart_rx_valid(rx_valid_o),
     .uart_tx_done(tx_done_o),
     .data_in(rx_data_o),
@@ -48,8 +48,8 @@ compute_top #(
 uart_tx #(
     .CLKS_PER_BIT(CLKS_PER_BIT)
 ) uart_tx_u (
-    .i_Clock(clock),
-    .rst_n(nreset),
+    .i_Clock(clk),
+    .rst_n(rst_n),
     .i_Tx_DV(tx_valid_i),
     .i_Tx_Byte(tx_data_i),
     .o_Tx_Serial(tx_serial_o),

@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+# SPDX-FileCopyrightText: © 2024 Kai Harris
+# SPDX-License-Identifier: Apache-2.0
 
 import cocotb
 from verif.uart import run_program
@@ -20,22 +21,25 @@ PROGRAMS = {
 # ---------------------------------------------------------------------------
 # Test entry points
 # ---------------------------------------------------------------------------
-
 @cocotb.test()
 async def add_1_program(dut):
-    await run_program(dut, *PROGRAMS["add_1"])
+    trace = await run_program(dut, *PROGRAMS["add_1"])
+    assert trace == bytearray(b'\x00\x01\x02\x03\x04\x05\x06')
 
 @cocotb.test()
 async def add_1_nop_program(dut):
-    await run_program(dut, *PROGRAMS["add_1_nop"])
+    trace = await run_program(dut, *PROGRAMS["add_1_nop"])
+    assert trace == bytearray(b'\x00\x01\x01\x01\x01\x01\x01')
 
 @cocotb.test()
 async def load_add_1_store_load_program(dut):
-    await run_program(dut, *PROGRAMS["load_add_1_store"])
+    trace = await run_program(dut, *PROGRAMS["load_add_1_store"])
+    assert trace == bytearray(b'\x00\x00\x01\x01\x01\x01\x01')
 
 @cocotb.test()
 async def not_add_1_not_program(dut):
-    await run_program(dut, *PROGRAMS["not_add_1_not"])
+    trace = await run_program(dut, *PROGRAMS["not_add_1_not"])
+    assert trace == bytearray(b'\x00\xff\x01\xfe\xfe\xfe\xfe')
 
 @cocotb.test()
 async def add_jump_add_program(dut):

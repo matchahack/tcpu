@@ -10,7 +10,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 # ---------------------------------------------------------------------------
-# Constants (UPDATED)
+# Constants
 # ---------------------------------------------------------------------------
 
 CLK_PERIOD_NS = 20  # 50 MHz
@@ -68,7 +68,6 @@ async def run_program(dut, bytes_: list[int], description: str):
     # Debug tracking
     # -----------------------------------------------------------------------
     last_tx = None
-    initial=0
 
     for cycle in range(SETTLE_CYCLES):
         await RisingEdge(dut.clk)
@@ -99,7 +98,7 @@ async def run_program(dut, bytes_: list[int], description: str):
 
     else:
         # -------------------------------------------------------------------
-        # Timeout diagnostics (IMPROVED)
+        # Timeout diagnostics
         # -------------------------------------------------------------------
         dut._log.info("Timeout waiting for UART data")
         dut._log.info(f"Bytes received: {uart_sink.count()}")
