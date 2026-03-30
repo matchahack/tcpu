@@ -56,3 +56,5 @@ make verif
 # Gate Level Synthesis, and Fabrication
 
 > Performed in this [TinyTapeout Fork](https://github.com/matchahack/ttsky-tcpu)
+
+![gds](./gds.png)
