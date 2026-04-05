@@ -63,7 +63,7 @@
       .CLKS_PER_BIT(CLKS_PER_BIT)
   ) base_interface_u (
       .clk(clk),
-      .rst_n(rst_n),
+      .rst_n(~rst_sync),
       .rx_serial_i(uart_rx),
       .tx_serial_o(uart_tx)
   );
